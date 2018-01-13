@@ -21,6 +21,18 @@ with open("resource.res","r") as f:
         for line in f:
             all_task[line.strip()]=0
 
+# To get a string meet the protocal requirement so that the sever can send it to the client
+def TaskResourceProtocal(taskfile,resourcefiles):
+    with open(taskfile, "r") as f:
+        content = f.read()
+    content+=TASK_RESOURCE_SPLIT
+    for f in resourcefiles:
+        content+=f+RESOURCE_NAME_CONTENT_SPLIT
+        with open(f,"r") as res:
+            content+=res.read()
+        content+=RESOURCE_SPLIT
+    content=content[0,-len(RESOURCE_SPLIT)]
+    return content
 
 
 class EchoHandler(BaseRequestHandler):
@@ -45,6 +57,7 @@ class EchoHandler(BaseRequestHandler):
 
             elif(msg == REQUEST_TASK_COMMAND):
                 if self.connected:
+                    #TaskResourceProtocal("TestFile.py",["resource.res"])
                     with open("TestFile.py","r") as f:
                         content = f.read()
 
